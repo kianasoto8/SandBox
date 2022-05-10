@@ -1,0 +1,104 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class RedWaypoints : MonoBehaviour
+{
+	[SerializeField]
+    private Transform[] waypoints;
+	public int speed;
+	
+	private int waypointIndex = 0;
+	private float dist;
+	
+	private void Start () 
+	{
+		transform.LookAt(waypoints[waypointIndex].position);
+	}
+	
+	void Update()
+	{
+		dist = Vector3.Distance(transform.position, waypoints[waypointIndex].position);
+		if(dist < 1f)
+		{
+			IncreaseIndex();
+		}
+		Patrol();
+	}
+	
+	void Patrol()
+	{
+		transform.Translate(Vector3.forward* speed* Time.deltaTime);
+	}
+	
+	void IncreaseIndex()
+	{
+		waypointIndex++;
+		if(waypointIndex >= waypoints.Length)
+		{
+			waypointIndex = 0;
+		}
+		transform.LookAt(waypoints[waypointIndex].position);
+	}
+	
+	public Vector3 currWay()
+	{
+		return waypoints[waypointIndex].position;
+	}
+	
+}
+
+
+	/*
+	[SerializeField]
+    private Transform[] waypoints;
+
+    [SerializeField]
+    private float moveSpeed = 2f;
+	
+    // Index of current waypoint from which Enemy walks
+    private int waypointIndex = 0;
+
+	private void Start () 
+	{
+        // Set position of Enemy as position of the first waypoint
+        transform.position = waypoints[waypointIndex].transform.position;
+	}
+
+	private void Update () 
+	{
+        Move();
+	}
+
+    private void Move()
+    {
+			transform.position = Vector3.MoveTowards(waypoints[waypointIndex].transform.position,
+               moveSpeed * Time.deltaTime);
+        // If Enemy didn't reach last waypoint it can move
+        // If enemy reached last waypoint then it stops
+        if (waypointIndex <= waypoints.Length - 1)
+        {
+			transform.position = Vector3.MoveTowards(waypoints[waypointIndex].transform.position,
+               moveSpeed * Time.deltaTime);
+			   
+
+            if (transform.position == OnTriggerEnter3D)
+            {
+                waypointIndex += 1;
+            } 
+			
+        }
+    }
+	
+	private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.tag == "waypoint")
+		{
+			waypointIndex += 1;
+			Debug.Log("Hello");
+		}
+		
+		Debug.Log("Bye");
+		
+    }
+	*/
